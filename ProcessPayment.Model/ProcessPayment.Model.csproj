@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netcoreapp2.2</TargetFramework>
+		<AssemblyName>ProcessPayment.Model</AssemblyName>
+		<RootNamespace>ProcessPayment.Model</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.6" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.6" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.6" />
+	  <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.2.0" />
+	  <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
+	  <PackageReference Include="System.Data.SqlClient" Version="4.6.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="appsettings.Development.json">
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Include="appsettings.json">
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="ProcessPayment.Model.csproj.DotSettings" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\ProcessPayment.Common\ProcessPayment.Common.csproj" />
+	</ItemGroup>
+
+</Project>

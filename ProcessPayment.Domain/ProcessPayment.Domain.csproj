@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netcoreapp2.2</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\ProcessPayment.Common\ProcessPayment.Common.csproj" />
+	  <ProjectReference Include="..\ProcessPayment.Model\ProcessPayment.Model.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="FluentValidation" Version="8.4.0" />
+	  <PackageReference Include="Mapster" Version="4.1.0" />
+	  <PackageReference Include="MediatR" Version="7.0.0" />
+	  <PackageReference Include="Polly" Version="7.1.1" />
+	  <PackageReference Include="Serilog" Version="2.8.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="ProcessPayment.Domain.csproj.DotSettings" />
+	</ItemGroup>
+
+</Project>

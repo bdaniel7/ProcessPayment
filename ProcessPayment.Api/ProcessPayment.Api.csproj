@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>netcoreapp2.2</TargetFramework>
+		<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Autofac" Version="4.9.4" />
+		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.4.0" />
+		<PackageReference Include="FluentValidation" Version="8.4.0" />
+		<PackageReference Include="FluentValidation.AspNetCore" Version="8.4.0" />
+		<PackageReference Include="Mapster" Version="4.1.0" />
+		<PackageReference Include="MediatR" Version="7.0.0" />
+		<PackageReference Include="MediatR.Extensions.Autofac.DependencyInjection" Version="3.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.App" />
+		<PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+		<PackageReference Include="Serilog.AspNetCore" Version="3.0.0" />
+		<PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
+		<PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="ProcessPayment.Api.csproj.DotSettings" />
+	  <None Remove="log\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\ProcessPayment.Domain\ProcessPayment.Domain.csproj" />
+	  <ProjectReference Include="..\ProcessPayment.Model\ProcessPayment.Model.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Remove="log\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Remove="log\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Remove="log\**" />
+	</ItemGroup>
+
+</Project>
