@@ -22,12 +22,12 @@ namespace ProcessPayment.Domain
 												IDisposable
 	{
 		readonly IPaymentsRepository paymentsRepository;
-		readonly IGatewayProvider gatewayProvider;
+		readonly CheapPaymentGateway initialGateway;
 
-		public ProcessPaymentRequestHandler(IPaymentsRepository paymentsRepository, IGatewayProvider gatewayProvider)
+		public ProcessPaymentRequestHandler(IPaymentsRepository paymentsRepository, CheapPaymentGateway initialGateway)
 		{
 			this.paymentsRepository = paymentsRepository;
-			this.gatewayProvider = gatewayProvider;
+			this.initialGateway = initialGateway;
 		}
 
 		/// <inheritdoc />
@@ -36,13 +36,11 @@ namespace ProcessPayment.Domain
 		{
 			var payment = request.Adapt<ProcessPaymentRequest, Payment>();
 
-			IPaymentGateway paymentGateway = gatewayProvider.GetPaymentGateway(payment.Amount);
-
-			var paymentStatus = await paymentGateway.ProcessPayment(payment);
+			var paymentStatus = await initialGateway.StartProcessingPayment(payment);
 
 			payment.UpdateState(paymentStatus);
 
-			await paymentsRepository.SavePayment(payment, cancellationToken);
+			//await paymentsRepository.SavePayment(payment, cancellationToken);
 
 			payment.Adapt(request);
 

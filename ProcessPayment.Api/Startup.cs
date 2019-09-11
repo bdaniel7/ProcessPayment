@@ -81,6 +81,10 @@ namespace ProcessPayment.Api
 				.AsImplementedInterfaces()
 				.InstancePerLifetimeScope();
 
+			builder.Register(ctx => new CheapPaymentGateway(ctx.Resolve<ExpensivePaymentGateway>()));
+			builder.Register(ctx => new ExpensivePaymentGateway(ctx.Resolve<PremiumPaymentGateway>()));
+			builder.Register(ctx => new PremiumPaymentGateway(null));
+
 			builder.Populate(services);
 
 			Container = builder.Build();

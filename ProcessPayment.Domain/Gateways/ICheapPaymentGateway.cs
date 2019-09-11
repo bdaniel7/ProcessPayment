@@ -6,16 +6,33 @@ namespace ProcessPayment.Domain
 {
 	public interface ICheapPaymentGateway : IPaymentGateway { }
 
-	public class CheapPaymentGateway : ICheapPaymentGateway
+	public class CheapPaymentGateway : PaymentGateway, ICheapPaymentGateway
 	{
 		/// <inheritdoc />
-		public async Task<PaymentStatus> ProcessPayment(Payment payment)
+		public CheapPaymentGateway(PaymentGateway nextGateway)
+			: base(nextGateway)
+		{ }
+
+		/// <inheritdoc />
+		public override bool CanProcessPayment(Payment payment)
 		{
-			return await Task.FromResult(new PaymentStatus()
+			return payment.Amount < 20;
+		}
+
+		/// <inheritdoc />
+		public override async Task<PaymentStatus> ProcessPayment(Payment payment)
+		{
+			if (CanProcessPayment(payment))
 			{
-				State = PaymentStateEnum.Processed,
-				Message = $"Processed by {GetType().Name}"
-			});
+				return await Task.FromResult(new PaymentStatus()
+				{
+					State = PaymentStateEnum.Processed,
+					Message = $"Processed by {GetType().Name}"
+				});
+			}
+
+			return await nextGateway.ProcessPayment(payment);
+
 		}
 	}
 }

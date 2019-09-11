@@ -7,21 +7,36 @@ namespace ProcessPayment.Domain
 {
 	public interface IExpensivePaymentGateway : IPaymentGateway { }
 
-	public class ExpensivePaymentGateway : IExpensivePaymentGateway
+	public class ExpensivePaymentGateway : PaymentGateway, IExpensivePaymentGateway
 	{
 		/// <inheritdoc />
-		public async Task<PaymentStatus> ProcessPayment(Payment payment)
+		public ExpensivePaymentGateway(PaymentGateway nextGateway)
+			: base(nextGateway)
+		{ }
+
+		/// <inheritdoc />
+		public override bool CanProcessPayment(Payment payment)
 		{
-			return await RetryPolicies.CheapGatewayRetryPolicy
-									.ExecuteAsync(processPayment);
+			return payment.Amount > 20 && payment.Amount < 500;
+		}
+
+		/// <inheritdoc />
+		public override async Task<PaymentStatus> ProcessPayment(Payment payment)
+		{
+			if (CanProcessPayment(payment))
+			{
+				return await RetryPolicies.CheapGatewayRetryPolicy
+					.ExecuteAsync(processPayment);
+			}
+
+			return await nextGateway.ProcessPayment(payment);
 		}
 
 		Task<PaymentStatus> processPayment()
 		{
-			Random rand = new Random();
-			int num = rand.Next(1,2);
+			var time = DateTime.Now;
 
-			if (num == 2)
+			if ((time.Second % 7) == 0)
 				throw new PaymentGatewayNotAvailableException();
 
 			return Task.FromResult(new PaymentStatus()
