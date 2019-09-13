@@ -36,11 +36,11 @@ namespace ProcessPayment.Domain
 		{
 			var payment = request.Adapt<ProcessPaymentRequest, Payment>();
 
-			var paymentStatus = await initialGateway.StartProcessingPayment(payment);
+			var paymentStatus = await initialGateway.ProcessPayment(payment);
 
 			payment.UpdateState(paymentStatus);
 
-			//await paymentsRepository.SavePayment(payment, cancellationToken);
+			await paymentsRepository.SavePayment(payment, cancellationToken);
 
 			payment.Adapt(request);
 

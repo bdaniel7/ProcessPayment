@@ -11,8 +11,7 @@ namespace ProcessPayment.Domain
 	{
 		/// <inheritdoc />
 		public ExpensivePaymentGateway(PaymentGateway nextGateway)
-			: base(nextGateway)
-		{ }
+			: base(nextGateway) { }
 
 		/// <inheritdoc />
 		public override bool CanProcessPayment(Payment payment)
@@ -21,15 +20,10 @@ namespace ProcessPayment.Domain
 		}
 
 		/// <inheritdoc />
-		public override async Task<PaymentStatus> ProcessPayment(Payment payment)
+		public override async Task<PaymentStatus> HandlePayment(Payment payment)
 		{
-			if (CanProcessPayment(payment))
-			{
-				return await RetryPolicies.CheapGatewayRetryPolicy
-					.ExecuteAsync(processPayment);
-			}
-
-			return await nextGateway.ProcessPayment(payment);
+			return await RetryPolicies.CheapGatewayRetryPolicy
+				.ExecuteAsync(processPayment);
 		}
 
 		Task<PaymentStatus> processPayment()

@@ -10,8 +10,7 @@ namespace ProcessPayment.Domain
 	{
 		/// <inheritdoc />
 		public CheapPaymentGateway(PaymentGateway nextGateway)
-			: base(nextGateway)
-		{ }
+			: base(nextGateway) { }
 
 		/// <inheritdoc />
 		public override bool CanProcessPayment(Payment payment)
@@ -20,19 +19,13 @@ namespace ProcessPayment.Domain
 		}
 
 		/// <inheritdoc />
-		public override async Task<PaymentStatus> ProcessPayment(Payment payment)
+		public override async Task<PaymentStatus> HandlePayment(Payment payment)
 		{
-			if (CanProcessPayment(payment))
+			return await Task.FromResult(new PaymentStatus()
 			{
-				return await Task.FromResult(new PaymentStatus()
-				{
-					State = PaymentStateEnum.Processed,
-					Message = $"Processed by {GetType().Name}"
-				});
-			}
-
-			return await nextGateway.ProcessPayment(payment);
-
+				State = PaymentStateEnum.Processed,
+				Message = $"Processed by {GetType().Name}"
+			});
 		}
 	}
 }

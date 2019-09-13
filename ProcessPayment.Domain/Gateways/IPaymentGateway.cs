@@ -7,32 +7,33 @@ namespace ProcessPayment.Domain
 	public interface IPaymentGateway
 	{
 		bool CanProcessPayment(Payment payment);
+		Task<PaymentStatus> HandlePayment(Payment payment);
 		Task<PaymentStatus> ProcessPayment(Payment payment);
 	}
 
 	public abstract class PaymentGateway : IPaymentGateway
 	{
-		protected readonly IPaymentGateway nextGateway;
+		protected readonly IPaymentGateway NextGateway;
 
 		protected PaymentGateway(PaymentGateway nextGateway)
 		{
-			this.nextGateway = nextGateway;
+			NextGateway = nextGateway;
 		}
 
-		public async Task<PaymentStatus> StartProcessingPayment(Payment payment)
+		public async Task<PaymentStatus> ProcessPayment(Payment payment)
         {
 			if (CanProcessPayment(payment))
 			{
-				return await ProcessPayment(payment);
+				return await HandlePayment(payment);
 			}
 
-			return await nextGateway.ProcessPayment(payment);
+			return await NextGateway.ProcessPayment(payment);
         }
 
 		/// <inheritdoc />
 		public abstract bool CanProcessPayment(Payment payment);
 
 		/// <inheritdoc />
-		public abstract Task<PaymentStatus> ProcessPayment(Payment payment);
+		public abstract Task<PaymentStatus> HandlePayment(Payment payment);
 	}
 }
